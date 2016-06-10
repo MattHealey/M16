@@ -5,7 +5,7 @@ blank <- expand.grid(age = c("A","B","C","D","E","F"),
             quin= c("01", "02", "03", "04", "05"),
             year= c("2002", "2003", "2004", "2005", "2006", "2007", "2008", "2009", "2010", "2011", "2012", "2013", "2014"),
             dhb = c("Auckland" ,"Bay of Plenty","Canterbury", "Capital & Coast",    "Counties Manukau",   "Hawke's Bay", "Hutt Valley",      
-                    "Lakes", "MidCentral", "Nelson Marlborough", "Northland", "Otago", "South Canterbury", "Southland", 
+                    "Lakes", "MidCentral", "Nelson Marlborough", "Northland", "South Canterbury", "Southern", 
                     "Tairawhiti", "Taranaki", "Waikato", "Wairarapa", "Waitemata", "West Coast", "Whanganui"),
             deaths = 0, pop = 0)
 
@@ -13,18 +13,58 @@ c01 <- read.csv("R2001.csv"); c06 <- read.csv("R2006.csv"); c13 <- read.csv("R20
 lb <- read.csv("lbimp.csv"); lb$year <- factor(lb$year); lb$dep <- factor(lb$dep); lb$age <- as.factor("lb"); levels(lb$eth) <- c("Asian", "European","Maori", "MELAA", "Pacific" , "Total" ,"Unknown")
 c01$y2001 <- 2001; c06$y2006 <- 2006; c13$y2013 <- 2013
 levels(c01$dhb);  levels(c06$dhb);  levels(c13$dhb); levels(lb$dhb)
-levels(c01$dhb) <- c("Area outside District Health Board", "Auckland", "Bay of Plenty", "Canterbury", 
-                     "Capital & Coast", "Counties Manukau" , "Hawke's Bay" , "Hutt Valley" , "Lakes" ,
-                     "MidCentral" , "Nelson Marlborough" , "New Zealand" , "Northland" , "Otago" ,
-                     "South Canterbury" , "Southland" , "Tairawhiti" , "Taranaki" ,
-                     "Waikato" , "Wairarapa"  ,"Waitemata" , "West Coast" , "Whanganui" )
-levels(c06$dhb) <- levels(c01$dhb); levels(c13$dhb) <- levels(c01$dhb)
+levels(c01$dhb) <- levels(c06$dhb) <- levels(c13$dhb)  <- list("Area outside District Health Board" = "Area outside District Health Board",
+                     "Auckland" = "Auckland DHB",
+                     "Bay of Plenty" = "Bay of Plenty DHB",
+                     "Canterbury" = "Canterbury DHB", 
+                     "Capital & Coast" = "Capital and Coast DHB",
+                     "Counties Manukau" = "Counties Manukau DHB",
+                     "Hawke's Bay" = "Hawke's Bay DHB",
+                     "Hutt Valley" = "Hutt DHB",
+                     "Lakes" = "Lakes DHB",
+                     "MidCentral" = "Midcentral DHB",
+                     "Nelson Marlborough" = "Nelson Marlborough DHB",
+                     "New Zealand" = "New Zealand DHB", 
+                     "Northland" = "Northland DHB",
+                     "South Canterbury" = "South Canterbury DHB", 
+                     "Southern" = c("Otago DHB", "Southland DHB"),
+                     "Tairawhiti" = "Tairawhiti DHB",
+                     "Taranaki" = "Taranaki DHB",
+                     "Waikato" = "Waikato DHB",
+                     "Wairarapa" = "Wairarapa DHB", 
+                     "Waitemata" = "Waitemata DHB", 
+                     "West Coast" = "West Coast DHB",
+                     "Whanganui" = "Whanganui DHB" )
+levels(lb$dhb) <- list("Area outside District Health Board" = "Area outside District Health Board",
+                       "Auckland" = "Auckland",
+                       "Bay of Plenty" = "Bay of Plenty",
+                       "Canterbury" = "Canterbury", 
+                       "Capital & Coast" = "Capital & Coast",
+                       "Counties Manukau" = "Counties Manukau",
+                       "Hawke's Bay" = "Hawke's Bay",
+                       "Hutt Valley" = "Hutt Valley",
+                       "Lakes" = "Lakes",
+                       "MidCentral" = "MidCentral",
+                       "Nelson Marlborough" = "Nelson Marlborough",
+                       "New Zealand" = "New Zealand", 
+                       "Northland" = "Northland DHB",
+                       "South Canterbury" = "South Canterbury", 
+                       "Southern" = c("Otago", "Southland"),
+                       "Tairawhiti" = "Tairawhiti",
+                       "Taranaki" = "Taranaki",
+                       "Waikato" = "Waikato",
+                       "Wairarapa" = "Wairarapa", 
+                       "Waitemata" = "Waitemata", 
+                       "West Coast" = "West Coast",
+                       "Whanganui" = "Whanganui" )
+lb <- droplevels(lb); c01 <- droplevels(c01); c06 <- droplevels(c06); c13 <- droplevels(c13)
+#levels(c06$dhb) <- levels(c01$dhb); levels(c13$dhb) <- levels(c01$dhb)
 ## but remove AODHB, Unknown, Total and NZ
 lb  <-  lb[lb$dhb  != "Area outside District Health Board",];lb  <-  lb[lb$dhb  != "Unknown",];lb  <-  lb[lb$dhb  != "New Zealand",]
 c01 <- c01[c01$dhb != "Area outside District Health Board",];c01 <- c01[c01$dhb != "New Zealand",]
 c06 <- c06[c06$dhb != "Area outside District Health Board",];c06 <- c06[c06$dhb != "New Zealand",]
 c13 <- c13[c13$dhb != "Area outside District Health Board",];c13 <- c13[c13$dhb != "New Zealand",]
-#lb <- droplevels(lb); c01 <- droplevels(c01); c06 <- droplevels(c06); c13 <- droplevels(c13)
+lb <- droplevels(lb); c01 <- droplevels(c01); c06 <- droplevels(c06); c13 <- droplevels(c13)
 # eth doesnt
 levels(c01$eth);  levels(c06$eth);  levels(c13$eth); levels(lb$eth)
 #lb  "Asian"    "European" "Maori"    "MELAA"    "Pacific"  "Total"    "Unknown" 
@@ -212,13 +252,13 @@ nums <- nums[nums$NzhisDep06 != "NA",]
 row.has.na <- apply(nums, 1, function(x){any(is.na(x))}); sum(row.has.na);nums <- nums[!row.has.na,]
 nums$NzhisDep06 <- as.factor(nums$NzhisDep06)
 nums <- droplevels(nums)
-nums <- nums[,c(2,3,4,5,6,7,10,12,13,14)]
-names(nums) <- c( "icd" , "gen" , "agey" , "year" , "age" , "dhb", "eth", "quin", "cat", "cau")
+nums <- nums[,c(2,3,4,5,6,7,8,9,13,15,16,17,18)]
+names(nums) <- c( "icd" , "gen" , "dob", "dod", "year" , "agey" , "age" , "dhb", "eth", "quin", "cat", "cau", "int")
 levels(nums$dhb) <- c("Auckland", "Bay of Plenty", "Canterbury", 
                       "Capital & Coast", "Counties Manukau" , "Hawke's Bay" ,
                       "Hutt Valley" , "Lakes" , "MidCentral" ,
                       "Nelson Marlborough" , "Northland",
-                      "Otago" , "South Canterbury" , "Southland" ,
+                      "South Canterbury" , "Southern" ,
                       "Tairawhiti" , "Taranaki" ,"Waikato" , 
                       "Wairarapa"  ,"Waitemata" , "West Coast" , "Whanganui" )
 levels(nums$eth) <- list("Maori" = "Maori", "European or other" = c("European", "Asian", "MELAA", "Other"), "Pacific" = "Pacific Peoples")
@@ -230,7 +270,7 @@ nums <- droplevels(nums)
 ##
 # Merge Denoms and Nums
 ##
-nums <- nums[,c(2,4,5,6,7,8)]
+nums <- nums[,c(2,5,7,8,9,10)]
 nums$deaths <- 1
 temp <- aggregate(deaths ~ gen + year + age + dhb + eth + quin, data = nums,FUN = sum)
 names(temp) <- names(nums)
