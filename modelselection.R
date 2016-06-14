@@ -1,14 +1,14 @@
 library(MASS)
 ## Create vectors for outcome and predictors
 outcome <- c("deaths")
-predictors <- c("dhb","eth","gen","quin","age","year","pop")
+predictors <- c("eth","gen","quin","age","year")
 dataset    <- mort
 offs <- c("offset(log(1+pop))")
 ## The lines below should not need modification.
 ## Create list of models
 list.of.models <- lapply(seq_along((predictors)), function(n) {
   left.hand.side  <- outcome
-  right.hand.side <- apply(X = combn(predictors, n), MARGIN = 2, paste, collapse = " + ")
+  right.hand.side <- apply(X = combn(predictors, n), MARGIN = 2, paste, collapse = " * ")
   nof <- paste(left.hand.side, right.hand.side, sep = "  ~  ")
   paste(nof, offs, sep = " + ")
 })
@@ -29,5 +29,5 @@ result <- do.call(rbind, list.of.fits)
 ## Sort and print
 library(doBy)
 orderBy(~ AIC, result)
-write.csv(result, "model results4.csv")
-#rm(list.of.fits,list.of.models,offs,outcome,predictors,vector.of.models, gf, ms, dataset)
+write.csv(result, "model results.csv")
+rm(list.of.fits,list.of.models,offs,outcome,predictors,vector.of.models, dataset)
