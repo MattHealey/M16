@@ -258,7 +258,7 @@ levels(nums$dhb) <- list("Auckland" = "Auckland",
                       "Capital & Coast" = "Capital & Coast",
                       "Counties Manukau" = "Counties Manukau" ,
                       "Hawke's Bay" = "Hawke's Bay" ,
-                      "Hutt Valley" = "Hutt Valley" ,
+                      "Hutt Valley" = "Hutt" ,
                       "Lakes" = "Lakes" ,
                       "MidCentral" = "MidCentral" ,
                       "Nelson Marlborough" = "Nelson Marlborough",
@@ -295,7 +295,7 @@ temp$deaths[x] <- 0
 x <- temp[temp$pop < temp$deaths,]
 x
 mort <- temp
-#write.csv(mort, "mort.csv")
+#write.csv(mort, "mortV1.csv")
 temp <- rbind(blank,mort)
 mort <- aggregate(cbind(deaths,pop) ~ gen + age + eth + quin + dhb + year, data = temp, FUN = sum)
 #mort$year <- ordered(mort$year)

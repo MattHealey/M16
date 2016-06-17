@@ -285,7 +285,7 @@ temp$deaths[x] <- 0
 x <- temp[temp$pop < temp$deaths,]
 x
 mort <- temp
-#write.csv(mort, "mort.csv")
+#write.csv(mort, "mortV2.csv")
 temp <- rbind(blank,mort)
 mort <- aggregate(cbind(deaths,pop) ~ gen + age + eth + quin + dhb + year, data = temp, FUN = sum)
 #mort$year <- ordered(mort$year)
