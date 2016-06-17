@@ -4,9 +4,9 @@ blank <- expand.grid(age = c("A","B","C","D","E","F"),
             eth = c("Maori", "European or other","Pacific"  ),
             quin= c("01", "02", "03", "04", "05"),
             year= c("2002", "2003", "2004", "2005", "2006", "2007", "2008", "2009", "2010", "2011", "2012", "2013", "2014"),
-            dhb = c("Auckland" ,"Bay of Plenty","Canterbury", "Capital & Coast",    "Counties Manukau",   "Hawke's Bay", "Hutt Valley",      
-                    "Lakes", "MidCentral", "Nelson Marlborough", "Northland", "South Canterbury", "Southern", 
-                    "Tairawhiti", "Taranaki", "Waikato", "Wairarapa", "Waitemata", "West Coast", "Whanganui"),
+            dhb = c("Auckland" ,"BoP & Tairawhiti","Canterbury", "Capital & Coast", "Counties Manukau",   "Hawke's Bay", "Hutt Valley",
+                    "Lakes", "MidCentral & Wairarapa", "Nelson Marlborough", "Northland", "Sth Cant & Wst Coast",
+                    "Southern", "Taranaki", "Waikato", "Waitemata", "Whanganui"),
             deaths = 0, pop = 0)
 
 c01 <- read.csv("R2001.csv"); c06 <- read.csv("R2006.csv"); c13 <- read.csv("R2013.csv")
@@ -15,47 +15,41 @@ c01$y2001 <- 2001; c06$y2006 <- 2006; c13$y2013 <- 2013
 levels(c01$dhb);  levels(c06$dhb);  levels(c13$dhb); levels(lb$dhb)
 levels(c01$dhb) <- levels(c06$dhb) <- levels(c13$dhb)  <- list("Area outside District Health Board" = "Area outside District Health Board",
                      "Auckland" = "Auckland DHB",
-                     "Bay of Plenty" = "Bay of Plenty DHB",
-                     "Canterbury" = "Canterbury DHB", 
+                     "BoP & Tairawhiti" = c("Bay of Plenty DHB","Tairawhiti DHB"),
+                     "Canterbury" = "Canterbury DHB",
                      "Capital & Coast" = "Capital and Coast DHB",
                      "Counties Manukau" = "Counties Manukau DHB",
                      "Hawke's Bay" = "Hawke's Bay DHB",
                      "Hutt Valley" = "Hutt DHB",
                      "Lakes" = "Lakes DHB",
-                     "MidCentral" = "Midcentral DHB",
+                     "MidCentral & Wairarapa" = c("Midcentral DHB", "Wairarapa DHB"),
                      "Nelson Marlborough" = "Nelson Marlborough DHB",
-                     "New Zealand" = "New Zealand DHB", 
+                     "New Zealand" = "New Zealand DHB",
                      "Northland" = "Northland DHB",
-                     "South Canterbury" = "South Canterbury DHB", 
+                     "Sth Cant & Wst Coast" = c("South Canterbury DHB", "West Coast DHB"),
                      "Southern" = c("Otago DHB", "Southland DHB"),
-                     "Tairawhiti" = "Tairawhiti DHB",
                      "Taranaki" = "Taranaki DHB",
                      "Waikato" = "Waikato DHB",
-                     "Wairarapa" = "Wairarapa DHB", 
-                     "Waitemata" = "Waitemata DHB", 
-                     "West Coast" = "West Coast DHB",
+                     "Waitemata" = "Waitemata DHB",
                      "Whanganui" = "Whanganui DHB" )
 levels(lb$dhb) <- list("Area outside District Health Board" = "Area outside District Health Board",
                        "Auckland" = "Auckland",
-                       "Bay of Plenty" = "Bay of Plenty",
-                       "Canterbury" = "Canterbury", 
+                       "BoP & Tairawhiti" = c("Bay of Plenty", "Tairawhiti"),
+                       "Canterbury" = "Canterbury",
                        "Capital & Coast" = "Capital & Coast",
                        "Counties Manukau" = "Counties Manukau",
                        "Hawke's Bay" = "Hawke's Bay",
                        "Hutt Valley" = "Hutt Valley",
                        "Lakes" = "Lakes",
-                       "MidCentral" = "MidCentral",
+                       "MidCentral & Wairarapa" = c("MidCentral", "Wairarapa"),
                        "Nelson Marlborough" = "Nelson Marlborough",
-                       "New Zealand" = "New Zealand", 
+                       "New Zealand" = "New Zealand",
                        "Northland" = "Northland DHB",
-                       "South Canterbury" = "South Canterbury", 
+                       "Sth Cant & Wst Coast" = c("South Canterbury","West Coast"),
                        "Southern" = c("Otago", "Southland"),
-                       "Tairawhiti" = "Tairawhiti",
                        "Taranaki" = "Taranaki",
                        "Waikato" = "Waikato",
-                       "Wairarapa" = "Wairarapa", 
-                       "Waitemata" = "Waitemata", 
-                       "West Coast" = "West Coast",
+                       "Waitemata" = "Waitemata",
                        "Whanganui" = "Whanganui" )
 lb <- droplevels(lb); c01 <- droplevels(c01); c06 <- droplevels(c06); c13 <- droplevels(c13)
 #levels(c06$dhb) <- levels(c01$dhb); levels(c13$dhb) <- levels(c01$dhb)
@@ -67,10 +61,10 @@ c13 <- c13[c13$dhb != "Area outside District Health Board",];c13 <- c13[c13$dhb 
 lb <- droplevels(lb); c01 <- droplevels(c01); c06 <- droplevels(c06); c13 <- droplevels(c13)
 # eth doesnt
 levels(c01$eth);  levels(c06$eth);  levels(c13$eth); levels(lb$eth)
-#lb  "Asian"    "European" "Maori"    "MELAA"    "Pacific"  "Total"    "Unknown" 
-#2001"Asian"    "European" "Maori"    "Other"    "Pacific"  "Total"   
-#2006"Asian"    "European" "Maori"    "MELAA"    "Other"    "Pacific"  "Total"   
-#2013"Asian"    "European" "Maori"    "MELAA"    "Other"    "Pacific"  "Total"  
+#lb  "Asian"    "European" "Maori"    "MELAA"    "Pacific"  "Total"    "Unknown"
+#2001"Asian"    "European" "Maori"    "Other"    "Pacific"  "Total"
+#2006"Asian"    "European" "Maori"    "MELAA"    "Other"    "Pacific"  "Total"
+#2013"Asian"    "European" "Maori"    "MELAA"    "Other"    "Pacific"  "Total"
 # combine eth as stated above
 levels(lb$eth)  <- list("Maori" = "Maori", "European or other" = c("European", "Asian", "MELAA"), "Pacific" = "Pacific", "Total" = "Total", "Unknown" = "Unknown")
 levels(c01$eth) <- list("Maori" = "Maori", "European or other" = c("European", "Asian", "Other"), "Pacific" = "Pacific", "Total" = "Total")
@@ -84,18 +78,18 @@ c13 <-  c13[c13$eth  != "Total",]
 lb <- droplevels(lb); c01 <- droplevels(c01); c06 <- droplevels(c06); c13 <- droplevels(c13)
 # 3 levels
 levels(c01$eth);  levels(c06$eth);  levels(c13$eth); levels(lb$eth)
-#lb   "Maori"             "European or other" "Pacific"           
-#2001 "Maori"             "European or other" "Pacific"                    
-#2006 "Maori"             "European or other" "Pacific"               
-#2013 "Maori"             "European or other" "Pacific"       
+#lb   "Maori"             "European or other" "Pacific"
+#2001 "Maori"             "European or other" "Pacific"
+#2006 "Maori"             "European or other" "Pacific"
+#2013 "Maori"             "European or other" "Pacific"
 # now eth does!
 #
 c01$dep <- factor(c01$dep); c06$dep <- factor(c06$dep); c13$dep <- factor(c13$dep)
 levels(c01$dep);  levels(c06$dep);  levels(c13$dep); levels(lb$dep)
 # dep doesnt
-#2001 ".." "1"  "10" "2"  "3"  "4"  "5"  "6"  "7"  "8"  "9" 
-#2006 ".." "1"  "10" "2"  "3"  "4"  "5"  "6"  "7"  "8"  "9" 
-#2013 ".." "1"  "10" "2"  "3"  "4"  "5"  "6"  "7"  "8"  "9" 
+#2001 ".." "1"  "10" "2"  "3"  "4"  "5"  "6"  "7"  "8"  "9"
+#2006 ".." "1"  "10" "2"  "3"  "4"  "5"  "6"  "7"  "8"  "9"
+#2013 ".." "1"  "10" "2"  "3"  "4"  "5"  "6"  "7"  "8"  "9"
 #lb   "1"  "2"  "3"  "4"  "5"  "6"  "7"  "8"  "9"  "10" "99"
 ## make 10 level dep into 5 level quin
 levels(c01$dep) <- list("01" = c("1","2"), "02" = c("3", "4"), "03" = c("5","6"), "04" = c("7","8"), "05" = c("9","10"), "Unk" = "..")
@@ -107,7 +101,7 @@ c01 <- c01[c01$dep != "Unk",];c06 <- c06[c06$dep != "Unk",];c13 <- c13[c13$dep !
 levels(c01$dep);  levels(c06$dep);  levels(c13$dep); levels(lb$dep)
 #lb <- droplevels(lb); c01 <- droplevels(c01); c06 <- droplevels(c06); c13 <- droplevels(c13)
 ## tidy all levels
-# aggregate identical units 
+# aggregate identical units
 c01 <- aggregate(pop  ~ age + y2001 + dhb + eth + gen + dep, data = c01, sum)
 c06 <- aggregate(pop  ~ age + y2006 + dhb + eth + gen + dep, data = c06, sum)
 c13 <- aggregate(pop  ~ age + y2013 + dhb + eth + gen + dep, data = c13, sum)
@@ -195,13 +189,13 @@ x <- h[h$age == "A",]
 denom1$y2003 <- 2003; denom1$pop03 <- round(denom1$pop02 + (denom1$pop06 - denom1$pop02)/4,0)
 denom1$y2004 <- 2004; denom1$pop04 <- round(denom1$pop03 + (denom1$pop06 - denom1$pop02)/4,0)
 denom1$y2005 <- 2005; denom1$pop05 <- round(denom1$pop04 + (denom1$pop06 - denom1$pop02)/4,0)
-denom1$y2007 <- 2007; denom1$pop07 <- round(denom1$pop06 + (denom1$pop13 - denom1$pop06)/7,0) 
-denom1$y2008 <- 2008; denom1$pop08 <- round(denom1$pop07 + (denom1$pop13 - denom1$pop06)/7,0) 
-denom1$y2009 <- 2009; denom1$pop09 <- round(denom1$pop08 + (denom1$pop13 - denom1$pop06)/7,0) 
-denom1$y2010 <- 2010; denom1$pop10 <- round(denom1$pop09 + (denom1$pop13 - denom1$pop06)/7,0) 
-denom1$y2011 <- 2011; denom1$pop11 <- round(denom1$pop10 + (denom1$pop13 - denom1$pop06)/7,0) 
-denom1$y2012 <- 2012; denom1$pop12 <- round(denom1$pop11 + (denom1$pop13 - denom1$pop06)/7,0) 
-denom1$y2014 <- 2014; denom1$pop14 <- round(denom1$pop13 + (denom1$pop13 - denom1$pop06)/7,0) 
+denom1$y2007 <- 2007; denom1$pop07 <- round(denom1$pop06 + (denom1$pop13 - denom1$pop06)/7,0)
+denom1$y2008 <- 2008; denom1$pop08 <- round(denom1$pop07 + (denom1$pop13 - denom1$pop06)/7,0)
+denom1$y2009 <- 2009; denom1$pop09 <- round(denom1$pop08 + (denom1$pop13 - denom1$pop06)/7,0)
+denom1$y2010 <- 2010; denom1$pop10 <- round(denom1$pop09 + (denom1$pop13 - denom1$pop06)/7,0)
+denom1$y2011 <- 2011; denom1$pop11 <- round(denom1$pop10 + (denom1$pop13 - denom1$pop06)/7,0)
+denom1$y2012 <- 2012; denom1$pop12 <- round(denom1$pop11 + (denom1$pop13 - denom1$pop06)/7,0)
+denom1$y2014 <- 2014; denom1$pop14 <- round(denom1$pop13 + (denom1$pop13 - denom1$pop06)/7,0)
 ## make lbs
 lb03$age <- "A"; colnames(lb03)[7] <- "pop03"
 y <- merge(x,lb03, c("dhb","eth","gen","quin", "age"), all = T)
@@ -244,29 +238,40 @@ denom$year <- factor(denom$year)
 ##
 # Generate numerator file
 ##
-nums <- read.csv("Mort12Oct2015V1.csv")
+nums <- read.csv("Mort12Oct2015V2.csv")
+nums <- nums[,c(2,3,4,5,6,7,8,9,13,15,16,17,18)]
+row.has.na <- apply(nums, 1, function(x){any(is.na(x))}); sum(row.has.na);nums <- nums[!row.has.na,]
 nums <- nums[nums$AgeGroup != "Z",]
 nums <- nums[nums$AgeGroup != "",]
 nums <- nums[nums$DHBResidence != "Overseas",]
 nums <- nums[nums$NzhisDep06 != "NA",]
-row.has.na <- apply(nums, 1, function(x){any(is.na(x))}); sum(row.has.na);nums <- nums[!row.has.na,]
 nums$NzhisDep06 <- as.factor(nums$NzhisDep06)
 nums <- droplevels(nums)
-nums <- nums[,c(2,3,4,5,6,7,8,9,13,15,16,17,18)]
-names(nums) <- c( "icd" , "gen" , "dob", "dod", "year" , "agey" , "age" , "dhb", "eth", "quin", "cat", "cau", "int")
-levels(nums$dhb) <- c("Auckland", "Bay of Plenty", "Canterbury", 
-                      "Capital & Coast", "Counties Manukau" , "Hawke's Bay" ,
-                      "Hutt Valley" , "Lakes" , "MidCentral" ,
-                      "Nelson Marlborough" , "Northland",
-                      "South Canterbury" , "Southern" ,
-                      "Tairawhiti" , "Taranaki" ,"Waikato" , 
-                      "Wairarapa"  ,"Waitemata" , "West Coast" , "Whanganui" )
-levels(nums$eth) <- list("Maori" = "Maori", "European or other" = c("European", "Asian", "MELAA", "Other"), "Pacific" = "Pacific Peoples")
 row.has.na <- apply(nums, 1, function(x){any(is.na(x))}); sum(row.has.na);nums <- nums[!row.has.na,]
+names(nums) <- c( "icd" , "gen" , "dob", "dod", "year" , "agey" , "age" , "dhb", "eth", "quin", "cat", "cau", "int")
+levels(nums$dhb) <- list("Auckland" = "Auckland",
+                       "BoP & Tairawhiti" = c("Bay of Plenty", "Tairawhiti"),
+                       "Canterbury" = "Canterbury",
+                       "Capital & Coast" = "Capital & Coast",
+                       "Counties Manukau" = "Counties Manukau",
+                       "Hawke's Bay" = "Hawke's Bay",
+                       "Hutt Valley" = "Hutt",
+                       "Lakes" = "Lakes",
+                       "MidCentral & Wairarapa" = c("MidCentral", "Wairarapa"),
+                       "Nelson Marlborough" = "Nelson Marlborough",
+                       "Northland" = "Northland DHB",
+                       "Sth Cant & Wst Coast" = c("South Canterbury","West Coast"),
+                       "Southern" = c("Otago", "Southland"),
+                       "Taranaki" = "Taranaki",
+                       "Waikato" = "Waikato",
+                       "Waitemata" = "Waitemata",
+                       "Whanganui" = "Whanganui" )
+levels(nums$eth) <- list("Maori" = "Maori", "European or other" = c("European", "Asian", "MELAA", "Other"), "Pacific" = "Pacific Peoples")
 levels(nums$quin) <- list("01" = c("1","2"), "02" = c("3", "4"), "03" = c("5","6"), "04" = c("7","8"), "05" = c("9","10"))
 levels(nums$gen) <- c("Female","Male")
 nums$year <- factor(nums$year)
 nums <- droplevels(nums)
+row.has.na <- apply(nums, 1, function(x){any(is.na(x))}); sum(row.has.na);nums <- nums[!row.has.na,]
 ##
 # Merge Denoms and Nums
 ##
@@ -284,7 +289,17 @@ temp$deaths[x] <- 0
 x <- temp[temp$pop < temp$deaths,]
 x
 mort <- temp
-write.csv(mort, "mortORIGINAL.csv")
+#write.csv(mort, "mortV3.csv")
 temp <- rbind(blank,mort)
 mort <- aggregate(cbind(deaths,pop) ~ gen + age + eth + quin + dhb + year, data = temp, FUN = sum)
-rm(denom,nums,temp,x,row.has.na, blank)
+#mort$year <- ordered(mort$year)
+#mort$age <- ordered(mort$age)
+#mort$quin <- ordered(mort$quin)
+contrasts(mort$age)  <- contr.treatment(levels(mort$age), base=which(levels(mort$age) == "C"))
+contrasts(mort$dhb)  <- contr.treatment(levels(mort$dhb), base=which(levels(mort$dhb) == "Auckland"))
+contrasts(mort$eth)  <- contr.treatment(levels(mort$eth), base=which(levels(mort$eth) == "European or other"))
+contrasts(mort$gen)  <- contr.treatment(levels(mort$gen), base=which(levels(mort$gen) == "Female"))
+contrasts(mort$quin) <- contr.treatment(levels(mort$quin), base=which(levels(mort$quin) == "01"))
+contrasts(mort$year) <- contr.treatment(levels(mort$year), base=which(levels(mort$year) == "2014"))
+mortV3 <- mort
+rm(denom,nums,temp,x,row.has.na, blank, mort)
